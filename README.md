@@ -8,6 +8,50 @@ Dự án gồm 3 thành phần:
 - **Backend** (`backend/`): REST API bằng FastAPI, nạp mô hình và trả kết quả dạng JSON.
 - **Frontend** (`frontend/`): giao diện Streamlit, gọi API và hiển thị kết quả.
 
+## Dữ liệu
+
+Thư mục `data/` không có trên GitHub. Tải dữ liệu từ Google Drive trước khi chạy notebook hoặc backend:
+
+**Link Drive:** <https://drive.google.com/drive/folders/1u75vZz8cUJKjFpQdxgbWS5FJ_rU80oEx?usp=drive_link>
+
+Sau khi tải, đặt file vào đúng vị trí:
+
+```
+data/
+├── raw/          # Training Dataset.arff, URL_dataset.csv
+└── processed/    # Dữ liệu đã làm sạch và chia tập
+```
+
+- `data/raw/` chứa file gốc, không sửa tay.
+- `data/processed/` chứa dữ liệu đã làm sạch và chia tập, dùng chung cho cả nhóm.
+- Khi cập nhật `data/processed/`, tải bản mới lên Drive và báo nhóm trước.
+
+## Artifacts và mô hình
+
+File mô hình không có trên GitHub. Tải từ Google Drive và đặt vào `artifacts/` trước khi chạy backend:
+
+**Link Drive:** <https://drive.google.com/drive/folders/1u75vZz8cUJKjFpQdxgbWS5FJ_rU80oEx?usp=drive_link>
+
+| File | Có trên GitHub? | Mô tả |
+|---|---|---|
+| `model.joblib` | Không, tải từ Drive | Mô hình đã huấn luyện |
+| `scaler.joblib` | Không, tải từ Drive | Bộ chuẩn hóa |
+| `features.json` | Có | Danh sách đặc trưng theo đúng thứ tự cột |
+
+- Dùng đúng tên file, không đổi tên.
+- Phiên bản thư viện được cố định trong `requirements.txt`, đặc biệt là `scikit-learn`. File `.joblib` có thể không nạp được khi khác phiên bản.
+- Mô hình được chọn và lý do chọn được ghi trong `artifacts/README.md`, kèm số liệu từ `reports/results_summary.csv`.
+**Trước khi chạy backend, đảm bảo đã tải đủ dữ liệu và artifacts từ Drive (xem mục Dữ liệu và Artifacts).:**
+
+### Quy ước nhãn
+
+| Hạng mục | Quy ước |
+|---|---|
+| Nhãn nội bộ | `1` = phishing, `0` = legitimate |
+| Dataset UCI | `-1` = phishing (khác với quy ước nội bộ) |
+| Ánh xạ nhãn | Chỉ ánh xạ ở một chỗ duy nhất, trong `feature_extractor.py` hoặc một hàm trong notebook |
+| Chia tập | Chia theo `host`, `stratify` theo nhãn, `random_state=42` |
+
 ## Cấu trúc thư mục
 
 ```
