@@ -8,68 +8,44 @@ Dự án gồm 3 thành phần:
 - **Backend** (`backend/`): REST API bằng FastAPI, nạp mô hình và trả kết quả dạng JSON.
 - **Frontend** (`frontend/`): giao diện Streamlit, gọi API và hiển thị kết quả.
 
-## Dữ liệu
+## Tài nguyên cần tải từ Google Drive
 
-Thư mục `data/` không có trên GitHub. Tải dữ liệu từ Google Drive trước khi chạy notebook hoặc backend:
+Dữ liệu và file mô hình không có trên GitHub. Trước khi chạy notebook hoặc backend, tải toàn bộ từ thư mục Drive sau:
 
-**Link Drive:** <https://drive.google.com/drive/folders/1u75vZz8cUJKjFpQdxgbWS5FJ_rU80oEx?usp=drive_link>
+**Link Drive:** https://drive.google.com/drive/folders/1u75vZz8cUJKjFpQdxgbWS5FJ_rU80oEx?usp=drive_link
 
 Sau khi tải, đặt file vào đúng vị trí:
 
-```
-data/
-├── raw/          # Training Dataset.arff, URL_dataset.csv
-└── processed/    # Dữ liệu đã làm sạch và chia tập
-```
-
-- `data/raw/` chứa file gốc, không sửa tay.
-- `data/processed/` chứa dữ liệu đã làm sạch và chia tập, dùng chung cho cả nhóm.
-- Khi cập nhật `data/processed/`, tải bản mới lên Drive và báo nhóm trước.
-
-## Artifacts và mô hình
-
-File mô hình không có trên GitHub. Tải từ Google Drive và đặt vào `artifacts/` trước khi chạy backend:
-
-**Link Drive:** <https://drive.google.com/drive/folders/1u75vZz8cUJKjFpQdxgbWS5FJ_rU80oEx?usp=drive_link>
-
-| File | Có trên GitHub? | Mô tả |
-|---|---|---|
-| `model.joblib` | Không, tải từ Drive | Mô hình đã huấn luyện |
-| `scaler.joblib` | Không, tải từ Drive | Bộ chuẩn hóa |
-| `features.json` | Có | Danh sách đặc trưng theo đúng thứ tự cột |
-
-- Dùng đúng tên file, không đổi tên.
-- Phiên bản thư viện được cố định trong `requirements.txt`, đặc biệt là `scikit-learn`. File `.joblib` có thể không nạp được khi khác phiên bản.
-- Mô hình được chọn và lý do chọn được ghi trong `artifacts/README.md`, kèm số liệu từ `reports/results_summary.csv`.
-**Trước khi chạy backend, đảm bảo đã tải đủ dữ liệu và artifacts từ Drive (xem mục Dữ liệu và Artifacts).:**
-
-### Quy ước nhãn
-
-| Hạng mục | Quy ước |
+| Thư mục | Nội dung |
 |---|---|
-| Nhãn nội bộ | `1` = phishing, `0` = legitimate |
-| Dataset UCI | `-1` = phishing (khác với quy ước nội bộ) |
-| Ánh xạ nhãn | Chỉ ánh xạ ở một chỗ duy nhất, trong `feature_extractor.py` hoặc một hàm trong notebook |
-| Chia tập | Chia theo `host`, `stratify` theo nhãn, `random_state=42` |
+| `data/raw/` | `URL_dataset.csv`, `Training_Dataset.arff` |
+| `data/processed/` | Dữ liệu đã làm sạch và chia tập |
+| `artifacts/` | `model.joblib`, `scaler.joblib` (nếu có) |
+
+`artifacts/features.json` có sẵn trên GitHub, không cần tải lại.
 
 ## Cấu trúc thư mục
 
 ```
 phishing-detection/
-├── artifacts/              # model.joblib, scaler.joblib, features.json
+├── artifacts/                  # model.joblib, scaler.joblib (Drive); features.json (GitHub)
+│   └── README.md
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
-│   │   ├── config.py       # Đường dẫn tới artifacts/ và data/
+│   │   ├── config.py           # Đường dẫn tới artifacts/ và data/
 │   │   ├── feature_extractor.py
 │   │   ├── main.py
 │   │   ├── predictor.py
 │   │   └── schemas.py
-│   └── tests/
-├── data/
-│   ├── raw/                # File gốc, không sửa tay
-│   └── processed/          # Dữ liệu đã làm sạch và chia tập
-├── experiments/            # experiment_log.csv
+│   ├── tests/
+│   └── README.md
+├── data/                       # Không có trên GitHub, tải từ Drive
+│   ├── raw/
+│   └── processed/
+├── experiments/
+│   ├── experiment_log.csv
+│   └── README.md
 ├── frontend/
 │   ├── app.py
 │   └── README.md
@@ -111,6 +87,8 @@ Python được cố định ở phiên bản **3.12**.
 
 ## Chạy dự án
 
+Trước khi chạy, đảm bảo đã tải đủ dữ liệu và artifacts từ Drive.
+
 Chạy backend (từ thư mục gốc):
 
 ```bash
@@ -129,8 +107,7 @@ streamlit run frontend/app.py
 ## Dữ liệu
 
 - `data/raw/` chứa file gốc. Không sửa tay. Mọi thay đổi đi qua notebook hoặc script.
-- `data/processed/` chứa dữ liệu đã làm sạch và chia tập, dùng chung cho cả nhóm.
-- Dữ liệu được đưa lên GitHub cùng repo. Khi cập nhật file trong `data/processed/`, chỉ commit khi thật sự cần và thống nhất trước với nhóm.
+- `data/processed/` chứa dữ liệu đã làm sạch và chia tập, dùng chung cho cả nhóm. Khi cập nhật, tải bản mới lên Drive và báo nhóm.
 
 ### Quy ước nhãn
 
@@ -188,7 +165,7 @@ Backend và notebook phải tạo ra đúng cùng một vector đặc trưng.
 - `confidence` là xác suất của lớp phishing, trong khoảng 0 đến 1.
 - Các khóa trong `details` phải khớp với đặc trưng hiển thị ở Frontend.
 
-### Response lỗi (400 hoặc 422)
+### Response lỗi (422)
 
 ```json
 {
@@ -203,6 +180,7 @@ Các mã lỗi hiện có:
 |---|---|
 | `INVALID_URL` | URL sai định dạng |
 | `EMPTY_URL` | URL rỗng |
+| `URL_TOO_LONG` | URL vượt giới hạn độ dài |
 | `MODEL_NOT_LOADED` | Mô hình chưa được nạp |
 
 Frontend chỉ xử lý các mã lỗi trên.
@@ -213,14 +191,14 @@ API dùng tiền tố `/api/v1/`. Nếu thay đổi contract không tương thí
 
 ## Artifacts và mô hình
 
-| File | Mô tả |
-|---|---|
-| `model.joblib` | Mô hình đã huấn luyện |
-| `scaler.joblib` | Bộ chuẩn hóa (nếu dùng) |
-| `features.json` | Danh sách đặc trưng theo đúng thứ tự cột |
+| File | Nguồn | Mô tả |
+|---|---|---|
+| `model.joblib` | Drive | Mô hình đã huấn luyện |
+| `scaler.joblib` | Drive | Bộ chuẩn hóa (chỉ có nếu mô hình cuối là SVM) |
+| `features.json` | GitHub | Danh sách đặc trưng theo đúng thứ tự cột |
 
 - Dùng đúng tên file, không đổi tên.
-- Phiên bản thư viện được cố định trong `requirements.txt`, đặc biệt là `scikit-learn`, vì file `.joblib` có thể không nạp được khi khác phiên bản.
+- Phiên bản thư viện được cố định trong `requirements.txt`, đặc biệt là `scikit-learn`. File `.joblib` có thể không nạp được khi khác phiên bản.
 - Mô hình được chọn và lý do chọn được ghi trong `artifacts/README.md`, kèm số liệu từ `reports/results_summary.csv`.
 
 ## Quy trình làm việc với Git
