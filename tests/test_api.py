@@ -1,10 +1,17 @@
 import pytest
 from fastapi.testclient import TestClient
 
+from app import config
 from app.config import MAX_URL_LENGTH
 from app.main import app
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def mock_mode(monkeypatch):
+    """Các test này kiểm tra contract và validate URL, không cần mô hình thật."""
+    monkeypatch.setattr(config, "MOCK_MODE", True)
 
 
 def post(url):
