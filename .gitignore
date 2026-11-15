@@ -1,10 +1,33 @@
+# Python environment
 .venv/
+venv/
 __pycache__/
 *.py[cod]
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Environment variables
 .env
+.env.*
+
+# All CSV datasets and experiment logs
 *.csv
+*.arff
+
+# Model artifacts
 *.pkl
 *.pt
 *.h5
 *.joblib
+
+# Python cache and test cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# OS files
+.DS_Store
+Thumbs.db
