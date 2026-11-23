@@ -15,7 +15,7 @@ DATA_DIR = BASE_DIR / "data"
 ARTIFACTS_DIR = BASE_DIR / "artifacts"
 
 # predictor.py nạp các file này khi khởi động.
-MODEL_PATH = ARTIFACTS_DIR / "model.joblib"
+MODEL_PATH = ARTIFACTS_DIR / "decision_tree_baseline.joblib"
 SCALER_PATH = ARTIFACTS_DIR / "scaler.joblib"  # chỉ có nếu mô hình cuối là SVM
 FEATURES_PATH = ARTIFACTS_DIR / "features.json"
 

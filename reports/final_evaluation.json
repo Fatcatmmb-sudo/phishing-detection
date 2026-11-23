@@ -1,0 +1,16 @@
+{
+  "selected_experiment": "RandomForest 120 trees, min_samples_leaf=2",
+  "selection_rule": "highest validation F1 among full-feature predict_proba models with phishing recall >= 0.95",
+  "validation": {
+    "val_accuracy": 0.992284224868195,
+    "val_precision": 0.9960686672782073,
+    "val_recall": 0.9705675796463002,
+    "val_f1": 0.9831527890056588
+  },
+  "test": {
+    "accuracy": 0.9776227711628458,
+    "precision_phishing": 0.9957273937101632,
+    "recall_phishing": 0.9074428699093579,
+    "f1_phishing": 0.9495374544968774
+  }
+}
