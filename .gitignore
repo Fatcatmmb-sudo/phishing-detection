@@ -14,6 +14,8 @@ __pycache__/
 # All CSV datasets and experiment logs
 *.csv
 *.arff
+!experiments/experiment_log.csv
+!reports/results_summary.csv
 
 # Model artifacts
 *.pkl
