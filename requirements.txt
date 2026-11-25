@@ -6,6 +6,7 @@ numpy
 scipy
 matplotlib
 seaborn
+mlflow==3.18.0
 
 # Backend API
 fastapi==0.161.1
