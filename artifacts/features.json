@@ -1,0 +1,12 @@
+[
+  "url_length",
+  "hostname_length",
+  "dot_count",
+  "hyphen_count",
+  "digit_count",
+  "at_count",
+  "slash_count",
+  "question_count",
+  "equal_count",
+  "has_https"
+]

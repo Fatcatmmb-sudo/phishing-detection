@@ -4,7 +4,12 @@ Chạy (từ thư mục gốc dự án):
     cd backend
     uvicorn app.main:app --reload
 Swagger UI: http://127.0.0.1:8000/docs
+
+Mặc định nạp mô hình thật từ artifacts/. Đặt biến môi trường PHISHING_MOCK=1
+để trả dữ liệu giả (không cần artifacts).
 """
+
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -12,7 +17,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 
 from app import config
-from app.predictor import predict_mock
+from app import predictor as predictor_module
+from app.predictor import ModelNotLoadedError
 from app.schemas import (
     ErrorResponse,
     HealthResponse,
@@ -21,10 +27,20 @@ from app.schemas import (
     UrlValidationError,
 )
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Nạp mô hình một lần khi khởi động. Nạp lỗi vẫn chạy, /predict trả 503."""
+    if not config.MOCK_MODE:
+        predictor_module.get_predictor().load()
+    yield
+
+
 app = FastAPI(
     title=config.APP_NAME,
     version=config.APP_VERSION,
     description="API phát hiện website phishing từ URL (đồ án Máy học).",
+    lifespan=lifespan,
 )
 
 # Cho phép Frontend (Streamlit chạy cổng khác) gọi API.
@@ -52,6 +68,21 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     return JSONResponse(status_code=422, content={"error": code, "message": message})
 
 
+@app.exception_handler(ModelNotLoadedError)
+async def model_not_loaded_handler(request: Request, exc: ModelNotLoadedError):
+    """Chưa nạp được mô hình -> 503 MODEL_NOT_LOADED (lý do chi tiết nằm trong log server)."""
+    return JSONResponse(
+        status_code=503,
+        content={
+            "error": config.ERROR_MODEL_NOT_LOADED,
+            "message": (
+                "Mô hình chưa được nạp. Kiểm tra thư mục artifacts/ "
+                "(model.joblib, features.json) và log của server."
+            ),
+        },
+    )
+
+
 @app.get("/", include_in_schema=False)
 def root():
     return RedirectResponse(url="/docs")
@@ -59,10 +90,11 @@ def root():
 
 @app.get("/health", response_model=HealthResponse, tags=["system"])
 def health() -> HealthResponse:
-    """Kiểm tra trạng thái dịch vụ. Tuần 1 chưa nạp mô hình nên model_loaded=False."""
+    """Trạng thái dịch vụ. model_loaded=True khi đã nạp xong mô hình thật."""
+    loaded = (not config.MOCK_MODE) and predictor_module.get_predictor().loaded
     return HealthResponse(
         version=config.APP_VERSION,
-        model_loaded=False,
+        model_loaded=loaded,
         mock_mode=config.MOCK_MODE,
     )
 
@@ -77,5 +109,7 @@ def health() -> HealthResponse:
     tags=["predict"],
 )
 def predict(request: PredictRequest) -> PredictResponse:
-    """Dự đoán một URL. Tuần 1: trả dữ liệu giả đúng format contract."""
-    return PredictResponse(**predict_mock(request.url))
+    """Dự đoán một URL bằng mô hình đã nạp (hoặc dữ liệu giả nếu PHISHING_MOCK=1)."""
+    if config.MOCK_MODE:
+        return PredictResponse(**predictor_module.predict_mock(request.url))
+    return PredictResponse(**predictor_module.get_predictor().predict(request.url))
