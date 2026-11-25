@@ -1,15 +1,27 @@
 # Kết quả chọn mô hình
 
-Thí nghiệm được chạy bằng `experiments/run_experiments.py`. Toàn bộ kết quả
-Validation nằm trong `reports/results_summary.csv`; đánh giá holdout cuối nằm
-trong `reports/final_evaluation.json`.
+## Mô hình được chọn
 
-- Random Forest 120 cây đạt Validation F1 phishing **0,9832**, Precision
-  **0,9961**, Recall **0,9706**.
-- Trên Test, mô hình đạt Accuracy **0,9776**, Precision phishing **0,9957**,
-  Recall **0,9074**, F1 **0,9495**.
-- Mô hình này được lưu ở `selected_model.joblib` để xem xét. Chưa thay mô hình
-  đang dùng bởi API: Recall trên Test giảm đáng kể so với Validation và cần
-  được đánh giá theo yêu cầu nghiệp vụ trước khi triển khai.
+Mô hình ứng viên cho báo cáo ML là **Random Forest** với 120 cây,
+`min_samples_leaf=2`, `random_state=42` và đủ 10 đặc trưng. Mô hình có F1
+Validation cao nhất trong các mô hình so sánh đáp ứng Recall Validation ít nhất
+0,95 và hỗ trợ `predict_proba` cho confidence của API.
 
-Mô hình API hiện tại tiếp tục được trỏ bởi `backend/app/config.py`.
+| Tập | Accuracy | Precision phishing | Recall phishing | F1 phishing |
+|---|---:|---:|---:|---:|
+| Validation | 0,9923 | 0,9961 | 0,9706 | 0,9832 |
+| Test | 0,9776 | 0,9957 | 0,9074 | 0,9495 |
+
+Mô hình ứng viên được lưu tại `selected_model.joblib`. Recall Test thấp hơn
+Validation đáng kể, nên API hiện vẫn dùng Decision Tree baseline theo đường dẫn
+trong `backend/app/config.py` cho đến khi nhóm xem xét mức Recall phù hợp.
+
+Các hạn chế về lối tắt HTTPS, nhãn có thể lỗi thời và thiên lệch domain được
+trình bày trong `reports/experiment_findings.md`.
+
+## Tài nguyên
+
+Dữ liệu nguồn và artifacts dùng chung của dự án: [thư mục Google Drive](https://drive.google.com/drive/folders/1u75vZz8cUJKjFpQdxgbWS5FJ_rU80oEx?usp=drive_link).
+
+Kết quả đầy đủ: `experiments/experiment_log.csv`,
+`reports/results_summary.csv` và `reports/final_evaluation.json`.
