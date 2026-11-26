@@ -77,7 +77,7 @@ async def model_not_loaded_handler(request: Request, exc: ModelNotLoadedError):
             "error": config.ERROR_MODEL_NOT_LOADED,
             "message": (
                 "Mô hình chưa được nạp. Kiểm tra thư mục artifacts/ "
-                "(model.joblib, features.json) và log của server."
+                "(selected_model.joblib, features.json) và log của server."
             ),
         },
     )

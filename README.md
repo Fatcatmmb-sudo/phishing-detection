@@ -20,7 +20,7 @@ Sau khi tải, đặt file vào đúng vị trí:
 |---|---|
 | `data/raw/` | `URL_dataset.csv`, `Training_Dataset.arff` |
 | `data/processed/` | Dữ liệu đã làm sạch và chia tập |
-| `artifacts/` | `model.joblib`, `scaler.joblib` (nếu có) |
+| `artifacts/` | `selected_model.joblib`, `features.json` (Decision Tree baseline được giữ riêng) |
 
 `artifacts/features.json` có sẵn trên GitHub, không cần tải lại.
 
@@ -28,7 +28,7 @@ Sau khi tải, đặt file vào đúng vị trí:
 
 ```
 phishing-detection/
-├── artifacts/                  # model.joblib, scaler.joblib (Drive); features.json (GitHub)
+├── artifacts/                  # selected_model.joblib (Drive); features.json (GitHub)
 │   └── README.md
 ├── backend/
 │   ├── app/
@@ -123,7 +123,7 @@ streamlit run frontend/app.py
 Backend và notebook phải tạo ra đúng cùng một vector đặc trưng.
 
 - **Danh sách đặc trưng:** lấy từ `artifacts/features.json`, giữ đúng thứ tự cột. Backend đọc file này khi khởi động, không tự định nghĩa lại.
-- **Kiểu dữ liệu:** số hoặc boolean được mã hóa thành `0/1`. Ví dụ `has_ip` là `0/1`, không phải `true/false`.
+- **Kiểu dữ liệu:** mô hình nhận các đặc trưng dạng số; `has_https` được mã hóa `0/1`. API hiển thị các cờ như `has_https` dưới dạng `true/false` trong `details`.
 - **Hàm trích xuất:** chỉ `backend/app/feature_extractor.py` được phép tính đặc trưng từ URL. Notebook và Backend đều import từ đó, không copy code.
 - **Test bắt buộc:** `backend/tests/` kiểm tra `extract(url)` với vài URL mẫu để đảm bảo kết quả khớp kỳ vọng.
 
@@ -140,7 +140,7 @@ Backend và notebook phải tạo ra đúng cùng một vector đặc trưng.
 
 ```json
 {
-  "url": "http://paypal.com.account-update.fake-domain.com/login"
+  "url": "https://www.wikipedia.org/"
 }
 ```
 
@@ -148,16 +148,21 @@ Backend và notebook phải tạo ra đúng cùng một vector đặc trưng.
 
 ```json
 {
-  "url": "http://paypal.com.account-update.fake-domain.com/login",
-  "prediction": "phishing",
-  "is_phishing": true,
-  "confidence": 0.96,
+  "url": "https://www.wikipedia.org/",
+  "prediction": "legitimate",
+  "is_phishing": false,
+  "confidence": 0.007767362308319675,
   "details": {
-    "has_ip": false,
-    "long_url": true,
-    "has_at_symbol": false,
-    "subdomain_count": 3,
-    "has_prefix_suffix": true
+    "url_length": 26,
+    "hostname_length": 17,
+    "dot_count": 2,
+    "hyphen_count": 0,
+    "digit_count": 0,
+    "at_count": 0,
+    "slash_count": 3,
+    "question_count": 0,
+    "equal_count": 0,
+    "has_https": true
   }
 }
 ```
@@ -193,8 +198,8 @@ API dùng tiền tố `/api/v1/`. Nếu thay đổi contract không tương thí
 
 | File | Nguồn | Mô tả |
 |---|---|---|
-| `model.joblib` | Drive | Mô hình đã huấn luyện |
-| `scaler.joblib` | Drive | Bộ chuẩn hóa (chỉ có nếu mô hình cuối là SVM) |
+| `selected_model.joblib` | Drive/local | Random Forest hiện được API sử dụng |
+| `decision_tree_baseline.joblib` | Drive/local | Mô hình baseline để đối chiếu |
 | `features.json` | GitHub | Danh sách đặc trưng theo đúng thứ tự cột |
 
 - Dùng đúng tên file, không đổi tên.

@@ -1,6 +1,6 @@
 """Bộ dự đoán.
 
-- `Predictor`: nạp artifacts (model.joblib, features.json, scaler.joblib nếu có) khi
+- `Predictor`: nạp artifacts (mô hình theo MODEL_PATH, features.json, scaler.joblib nếu có) khi
   khởi động, rồi dự đoán theo luồng: chuẩn hóa URL -> feature_extractor.extract(url)
   -> sắp xếp theo features.json -> (scaler) -> predict_proba -> kết quả theo contract.
   Thiếu hoặc lỗi artifact thì `loaded=False` và `predict()` ném ModelNotLoadedError

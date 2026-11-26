@@ -19,17 +19,12 @@ Người chạy: ______  Ngày: ______  Máy: ______
 - [ ] Tạo PR `feat/frontend-*` → `dev`, có ít nhất 1 người review
 - [ ] Merge `dev` → `main` sau khi checklist trên đạt
 - [ ] `main` chạy được trên một máy mới theo README
-### Test: Kiểm tra trạng thái API thật
+### Trạng thái sau khi chuyển sang Random Forest
 
-- **Endpoint:** `GET /health`
-- **HTTP Status:** `200 OK`
-- **mock_mode:** `False`
-- **model_loaded:** `False`
-- **Expected:** Model được nạp thành công.
-- **Actual:** Backend hoạt động nhưng không nạp được model.
-- **Result:** BLOCKED
-- **Reason:** Thiếu file `artifacts/decision_tree_baseline.joblib`.
-
-**Ghi chú:** Đã tắt Mock và khởi động Backend thành công. Chưa thể kiểm thử dự đoán bằng model thật do thiếu artifact triển khai.
-
-**Ảnh minh chứng:** Lưu ảnh kết quả PowerShell `/health` kèm theo báo cáo.
+- API được cấu hình nạp `artifacts/selected_model.joblib`.
+- Tệp mô hình có trong thư mục artifacts tại máy phát triển.
+- Các kiểm tra API trước đây được thực hiện với Decision Tree baseline; cần
+  khởi động lại Backend và xác nhận lại `GET /health` cùng một dự đoán mẫu sau
+  khi đổi mô hình.
+- Điền kết quả thực tế và lưu ảnh minh chứng sau lần kiểm tra mới; không dùng
+  trạng thái BLOCKED cũ vì trạng thái đó ghi sai tên artifact và đã lỗi thời.
