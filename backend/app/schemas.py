@@ -81,16 +81,21 @@ class PredictResponse(BaseModel):
 
     model_config = ConfigDict(json_schema_extra={
         "example": {
-            "url": "http://paypal.com.account-update.fake-domain.com/login",
-            "prediction": "phishing",
-            "is_phishing": True,
-            "confidence": 0.96,
+            "url": "https://www.wikipedia.org/",
+            "prediction": "legitimate",
+            "is_phishing": False,
+            "confidence": 0.007767362308319675,
             "details": {
-                "has_ip": False,
-                "long_url": True,
-                "has_at_symbol": False,
-                "subdomain_count": 3,
-                "has_prefix_suffix": True,
+                "url_length": 26,
+                "hostname_length": 17,
+                "dot_count": 2,
+                "hyphen_count": 0,
+                "digit_count": 0,
+                "at_count": 0,
+                "slash_count": 3,
+                "question_count": 0,
+                "equal_count": 0,
+                "has_https": True,
             },
         }
     })

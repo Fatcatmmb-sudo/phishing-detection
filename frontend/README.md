@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 ### Bước 2: Khởi động Backend
 
-Mặc định Backend **nạp mô hình thật** (cần các file trong `artifacts/`: `model.joblib`, `features.json`).
+Mặc định Backend **nạp mô hình thật** (cần các file trong `artifacts/`: `selected_model.joblib`, `features.json`).
 
 Mở Terminal thứ nhất:
 
@@ -110,11 +110,22 @@ python -m pytest tests/test_frontend_logic.py
 
 ```json
 {
-  "url": "https://example.com",
+  "url": "https://www.wikipedia.org/",
   "prediction": "legitimate",
   "is_phishing": false,
-  "confidence": 0.05,
-  "details": {}
+  "confidence": 0.007767362308319675,
+  "details": {
+    "url_length": 26,
+    "hostname_length": 17,
+    "dot_count": 2,
+    "hyphen_count": 0,
+    "digit_count": 0,
+    "at_count": 0,
+    "slash_count": 3,
+    "question_count": 0,
+    "equal_count": 0,
+    "has_https": true
+  }
 }
 ```
 

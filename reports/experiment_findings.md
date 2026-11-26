@@ -48,7 +48,8 @@ hay rằng HTTPS tự nó là dấu hiệu an toàn.
 Random Forest ứng viên đạt trên Test: Accuracy **0,9776**, Precision phishing
 **0,9957**, Recall phishing **0,9074**, F1 phishing **0,9495**. Recall Test thấp
 hơn Recall Validation (0,9706), nên cần xem xét khác biệt phân phối trước khi
-đổi mô hình đang phục vụ API. API hiện tiếp tục dùng Decision Tree baseline.
+đổi mô hình đang phục vụ API. API hiện đã được cấu hình dùng Random Forest
+`selected_model.joblib`; cần khởi động lại Backend để nạp mô hình mới.
 
 Các hạn chế cần nêu khi trình bày:
 

@@ -2,7 +2,7 @@
 
 ## Mô hình được chọn
 
-Mô hình ứng viên cho báo cáo ML là **Random Forest** với 120 cây,
+Mô hình được chọn cho API và báo cáo ML là **Random Forest** với 120 cây,
 `min_samples_leaf=2`, `random_state=42` và đủ 10 đặc trưng. Mô hình có F1
 Validation cao nhất trong các mô hình so sánh đáp ứng Recall Validation ít nhất
 0,95 và hỗ trợ `predict_proba` cho confidence của API.
@@ -12,9 +12,9 @@ Validation cao nhất trong các mô hình so sánh đáp ứng Recall Validatio
 | Validation | 0,9923 | 0,9961 | 0,9706 | 0,9832 |
 | Test | 0,9776 | 0,9957 | 0,9074 | 0,9495 |
 
-Mô hình ứng viên được lưu tại `selected_model.joblib`. Recall Test thấp hơn
-Validation đáng kể, nên API hiện vẫn dùng Decision Tree baseline theo đường dẫn
-trong `backend/app/config.py` cho đến khi nhóm xem xét mức Recall phù hợp.
+Mô hình được lưu tại `selected_model.joblib`; `backend/app/config.py` trỏ API tới
+file này. Recall Test thấp hơn Validation đáng kể, vì vậy cần trình bày hạn chế
+này và tiếp tục theo dõi khả năng bỏ sót phishing.
 
 Các hạn chế về lối tắt HTTPS, nhãn có thể lỗi thời và thiên lệch domain được
 trình bày trong `reports/experiment_findings.md`.
